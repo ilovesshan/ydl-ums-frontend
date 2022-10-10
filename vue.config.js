@@ -9,7 +9,7 @@ module.exports = {
     proxy: {
       "/api": {
         // target: process.env.NODE_ENV == "development" ? ServiceConfig.devBaseUrl : ServiceConfig.prodBaseUrl,
-        target: "http://localhost/usm",
+        target: "http://localhost:8080",
         ws: true,
         changeOrigin: true,
         pathRewrite: { '^/api': '' },

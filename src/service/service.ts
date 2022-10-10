@@ -3,7 +3,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 
 const baseConfig: AxiosRequestConfig = {
   // target path: https://www.wanandroid.com/
-  baseURL: "/api",
+  baseURL: "/api/ums",
   timeout: 5000,
 }
 
