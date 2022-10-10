@@ -13,7 +13,8 @@ const namespaced: boolean = true;
 
 const state: UserState = {
   user: {
-    username: "",
+    username: "ilovesshan",
+    token: "",
     isLogin: true,
   }
 }

@@ -1,8 +1,8 @@
 
 export interface User {
-  username:"",
-  token?: "",
-  isLogin: true,
+  username:String,
+  token:String,
+  isLogin: Boolean,
 }
 
 export interface UserState{
