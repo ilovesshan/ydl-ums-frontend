@@ -17,6 +17,10 @@
 import { computed } from '@vue/reactivity';
 import { defineComponent } from 'vue';
 import { useStore } from "vuex"
+
+
+import { selectList } from "@/service/user.service";
+
 export default defineComponent({
   name: 'HelloWorld',
 
@@ -25,6 +29,12 @@ export default defineComponent({
 
     const message = computed(() => store.state.user.user.username)
     const isLogin = computed(() => store.state.user.user.isLogin)
+
+    selectList().then(res=>{
+      console.log(res);
+    }).catch(err=>{
+      console.log(err);
+    })
 
     return {
       message, isLogin
