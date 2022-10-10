@@ -3,22 +3,61 @@
     <div class="common-layout">
       <el-container>
         <el-aside width="200px">
-          <el-menu default-active="1" @open="handleOpen" @close="handleClose">
+          <el-menu unique-opened background-color="#304156" default-active="1" @open="handleOpen" text-color="#bfcbd9"
+            @close="handleClose">
             <el-menu-item index="1">
               <el-icon>
-                <HomeFilled />
+                <Orange />
               </el-icon>
               <span>首页</span>
             </el-menu-item>
-            <el-sub-menu index="1-4">
-              <template #title> <span>用户管理</span> </template>
-              <el-menu-item index="1-4-1">用户管理</el-menu-item>
-              <el-menu-item index="1-4-2">授权管理</el-menu-item>
+            <el-sub-menu index="2">
+              <template #title>
+                <el-icon>
+                  <Setting />
+                </el-icon>
+                <span>系统管理</span>
+              </template>
+              <el-menu-item index="2-1">
+                <template #title>
+                  <el-icon>
+                    <UserFilled />
+                  </el-icon>
+                  <span>用户管理</span>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="2-2">
+                <template #title>
+                  <el-icon>
+                    <TurnOff />
+                  </el-icon>
+                  <span>角色管理</span>
+                </template>
+              </el-menu-item>
             </el-sub-menu>
-            <el-sub-menu index="6-4">
-              <template #title><span>系统日志</span></template>
-              <el-menu-item index="6-4-1">错误日志</el-menu-item>
-              <el-menu-item index="6-4-2">访问日志</el-menu-item>
+            <el-sub-menu index="3">
+              <template #title>
+                <el-icon>
+                  <Monitor />
+                </el-icon>
+                <span>系统监控</span>
+              </template>
+              <el-menu-item index="3-1">
+                <template #title>
+                  <el-icon>
+                    <ChromeFilled />
+                  </el-icon>
+                  <span>访问日志</span>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="3-2">
+                <template #title>
+                  <el-icon>
+                    <Connection />
+                  </el-icon>
+                  <span>在线用户</span>
+                </template>
+              </el-menu-item>
             </el-sub-menu>
           </el-menu>
         </el-aside>
@@ -42,12 +81,12 @@
 import { defineComponent } from 'vue'
 
 import {
-  HomeFilled
+  Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
 } from '@element-plus/icons-vue'
 
 export default defineComponent({
   components: {
-    HomeFilled
+    Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
   },
   setup() {
 
@@ -58,7 +97,7 @@ export default defineComponent({
       console.log(key, keyPath)
     }
     return {
-      handleOpen, handleClose, HomeFilled
+      handleOpen, handleClose
     }
   }
 })
@@ -80,26 +119,42 @@ export default defineComponent({
       background-color: #ffffff;
     }
 
+    .el-header{
+      text-align: center;
+      line-height: 60px;
+    }
+
     .el-main {
       margin: 10px 0;
     }
 
-    .el-aside {
-      .el-menu {
-        background-color: #d3dce6;
+    .el-aside,
+    .el-menu {
+      background-color: #304156;
+      .el-sub-menu,
+      .el-menu-item {
+        width: 200px;
+      }
 
+      ::v-deep .is-active{
+        width: 200px;
+        background-color: #304156;
+      }
+
+      ::v-deep .is-opened .el-menu {
+        background-color: #1f2d3d;
       }
     }
+  }
 
-    .el-footer {
-      background-color: #ffffff;
-      color: #3a3737;
-      text-align: center;
-      line-height: 60px;
+  .el-footer {
+    background-color: #ffffff;
+    color: #3a3737;
+    text-align: center;
+    line-height: 60px;
 
-      .footer-text {
-        font-size: 14px;
-      }
+    .footer-text {
+      font-size: 14px;
     }
   }
 }
