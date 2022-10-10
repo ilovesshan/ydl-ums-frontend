@@ -1,17 +1,34 @@
 import {
   createRouter,
-  createWebHashHistory,
+  createWebHistory,
 } from "vue-router"
 
 import type {
   RouteRecordRaw, RouteLocationNormalized,NavigationGuardNext
 } from "vue-router"
 
+const Index = ()=> require("@/views/index")
+const Login = () => require("@/views/login")
 
-const routes: RouteRecordRaw[] = new Array();
+const routes: RouteRecordRaw[] =[
+  {
+    path:"/",
+    redirect:"/index"
+  },
+  {
+    path:"/login",
+    name:"login",
+    component: Login,
+  },
+  {
+    path:"/index",
+    name:"index",
+    component:Index,
+  },
+];
 
 const router = createRouter({
-  history:createWebHashHistory(),
+  history:createWebHistory(),
   routes: routes,
 });
 
