@@ -7,14 +7,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from "vue-router"
+import { useStore } from "vuex"
 
 export default defineComponent({
   name: "",
-  setup(){
+  setup() {
     const router = useRouter();
-    const logoutHandler = ()=>{
-      router.push("/login");
-    }
+    const store = useStore();
+
+    const logoutHandler = () => store.dispatch("auth/logoutHandler");
+
     return {
       logoutHandler
     }

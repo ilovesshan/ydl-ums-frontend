@@ -8,6 +8,7 @@ import type {
   RouteRecordRaw, RouteLocationNormalized, NavigationGuardNext
 } from "vue-router"
 
+import cache from "@/utils/cache"
 
 const Index = () => import("@/views/index/index.vue")
 const Login = () => import("@/views/login/index.vue")
@@ -41,7 +42,7 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     next();
   } else {
     // 判断有没有登录
-    const token = window.localStorage.getItem("token");
+    const token = cache.getSessionString("token");
     if (token) {
       next();
     } else {

@@ -11,7 +11,8 @@ import type { IAuthState } from "./types";
 
 import { login } from "@/service/auth.service";
 import router from "@/router/index"
-import { ElMessage } from "element-plus"; 
+import { ElMessage } from "element-plus";
+import cache from "@/utils/cache";
 
 const namespaced: boolean = true;
 
@@ -28,10 +29,15 @@ const getters: GetterTree<IAuthState, RootState> = {}
 
 const mutations: MutationTree<IAuthState> = {
   saveUserInfo(state: IAuthState, payload: any) {
-    const {username, token } = payload;
+    const { username, token } = payload;
     state.user.userDetail = payload;
     state.user.username = username;
     state.user.token = token;
+  },
+  cleanUserInfo(state: IAuthState, payload: any) {
+    state.user.userDetail = "";
+    state.user.username = "";;
+    state.user.token = "";;
   }
 }
 
@@ -39,33 +45,44 @@ const actions: ActionTree<IAuthState, RootState> = {
   // 保存用户信息
   saveUserInfo({ commit }, payload: any) {
     commit("saveUserInfo", payload);
-    // 将用户信息保存在localStorage中
-    window.localStorage.setItem("token",payload.token);
-    window.localStorage.setItem("username",payload.username);
+    // 将用户信息保存在sessionStorage中
+    cache.saveSessionString("token", payload.token);
+    cache.saveSessionObject("userInfo", payload);
   },
-  
+
+  cleanUserInfo({ commit }, payload: any) {
+    commit("cleanUserInfo", payload);
+    cache.remove("token");
+    cache.remove("userInfo");
+  },
+
   // 用户登录
-  loginHandler({commit, dispatch}, payload:ILoginUserInfo){
-    login(payload).then(res =>{
-      const {code, message, data} = res;
-      if(code == 200){
+  loginHandler({ commit, dispatch }, payload: ILoginUserInfo) {
+    login(payload).then(res => {
+      const { code, message, data } = res;
+      if (code == 200) {
         // 登录成功
-        ElMessage({message, type: 'success'});
+        ElMessage({ message, type: 'success' });
 
         // 保存token和用户信息
         dispatch("saveUserInfo", data);
 
         // 跳转到首页
         router.push("/index");
-      }else{
+      } else {
         // 登录失败
-        ElMessage({message, type: 'error'});
+        ElMessage({ message, type: 'error' });
       }
-    }).catch(err =>{
-      ElMessage({message: err, type: 'error'});
+    }).catch(err => {
+      ElMessage({ message: err, type: 'error' });
     })
-  }
+  },
 
+  // 退出登录
+  logoutHandler({ commit, dispatch }, payload: ILoginUserInfo) {
+    dispatch("cleanUserInfo");
+    router.push("/login");
+  }
 }
 
 const userModule: Module<IAuthState, RootState> = {

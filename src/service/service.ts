@@ -5,6 +5,7 @@ import { ElMessage, ElLoading } from 'element-plus'
 import ServiceConfig from "./serviceConfig"
 
 import router from "@/router"
+import cache from "@/utils/cache"
 
 const baseConfig: AxiosRequestConfig = {
   baseURL: ServiceConfig.devProxyBaseUrl,
@@ -26,7 +27,7 @@ instance.interceptors.request.use(config => {
   // 开启loading
   loadingInstance = ElLoading.service({ lock: true, text: '拼命加载中...', background: 'rgba(0, 0, 0, 0.7)', });
 
-  const token = window.localStorage.getItem("token");
+  const token = cache.getSessionString("token");
   config.headers!["Authorization"] = token || "";
   return config;
 },
