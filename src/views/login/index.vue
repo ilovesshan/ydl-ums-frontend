@@ -24,22 +24,27 @@
 <script lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from "vue-router"
+import { useStore } from "vuex"
 
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { Avatar, Lock } from "@element-plus/icons-vue";
 
-
 import { ILoginUserInfo  } from "./loginTypes";
+
+import { login } from "@/service/auth.service"
 
 export default {
   setup() {
+
     const router = useRouter();
+    const store = useStore();
+
     const ruleFormRef = ref<FormInstance>()
 
     const ruleForm = reactive<ILoginUserInfo>({
-      username: "ilovesshan",
-      password: "ilovesshan123!@#",
+      username: "admin",
+      password: "admin123!@#",
     })
 
     const rules = reactive({
@@ -51,12 +56,25 @@ export default {
       if (!formEl) return
       formEl.validate((valid) => {
         if (valid) {
-          ElMessage({
-            message: 'login success',
-            type: 'success',
-          });
-          // 跳转到首页
-          router.push("/index");
+
+          login(ruleForm as ILoginUserInfo).then(res =>{
+            const {code, message, data} = res;
+            if(code == 200){
+              // 登录成功
+              ElMessage({message, type: 'success'});
+
+              // 保存token
+              store.dispatch("auth/saveUserInfo",data);
+
+              // 跳转到首页
+              router.push("/index");
+            }else{
+              // 登录失败
+              ElMessage({message, type: 'error'});
+            }
+          }).catch(err =>{
+            ElMessage({message: err, type: 'error'});
+          })
         } else {
           return false;
         }

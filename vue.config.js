@@ -6,6 +6,8 @@ module.exports = {
   devServer: {
     open: true,
     port: 8088,
+    // 允许内网穿透
+    disableHostCheck: true,
     proxy: {
       "/api": {
         // target: process.env.NODE_ENV == "development" ? ServiceConfig.devBaseUrl : ServiceConfig.prodBaseUrl,

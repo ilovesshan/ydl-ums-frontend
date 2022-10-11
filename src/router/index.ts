@@ -4,6 +4,8 @@ import {
   createWebHistory,
 } from "vue-router"
 
+import store from "@/store/index"
+
 import type {
   RouteRecordRaw, RouteLocationNormalized,NavigationGuardNext
 } from "vue-router"
@@ -33,10 +35,19 @@ const router = createRouter({
   routes: routes,
 });
 
-
 router.beforeEach((to: RouteLocationNormalized, from:RouteLocationNormalized, next: NavigationGuardNext) => {
-  next();
+  if(to.fullPath == "/login"){
+      // 放过登录
+    next();
+  }else{
+    // 判断有没有登录
+    const token = window.localStorage.getItem("token");
+    if(token){
+      next();
+    }else{
+      next("/login");
+    }
+  }
 });
-
 
 export default router;

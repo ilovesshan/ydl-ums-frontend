@@ -2,9 +2,9 @@
 export interface User {
   username:String,
   token:String,
-  isLogin: Boolean,
+  userDetail: any,
 }
 
-export interface UserState{
+export interface AuthState{
   user: User,
 }

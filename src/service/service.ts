@@ -1,6 +1,8 @@
 import axios from "axios"
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 
+import { ElMessage } from 'element-plus'
+
 const baseConfig: AxiosRequestConfig = {
   // target path: https://www.wanandroid.com/
   baseURL: "/api/ums",
@@ -17,18 +19,20 @@ const instance: AxiosInstance = axios.create(baseConfig)
 
 instance.interceptors.request.use(config => {
   return config;
-},
+  },
   error => {
+    ElMessage({message: "请求失败,请联系网站管理员", type: 'error'});
     console.log(error);
   }
-);
-
-
-instance.interceptors.response.use(response => {
-  return response;
-},
+  );
+  
+  
+  instance.interceptors.response.use(response => {
+    return response;
+  },
   error => {
     console.log(error);
+    ElMessage({message: "请求失败,请联系网站管理员", type: 'error'});
   }
 )
 

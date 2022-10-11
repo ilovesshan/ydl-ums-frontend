@@ -100,7 +100,6 @@ export default defineComponent({
 
   ::v-deep .is-active {
     width: 200px;
-    background-color: #304156;
   }
 
   ::v-deep .is-opened .el-menu {
