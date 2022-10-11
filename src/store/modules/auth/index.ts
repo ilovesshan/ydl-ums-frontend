@@ -6,12 +6,12 @@ import type {
 } from "vuex"
 
 import { RootState } from "../../types"
-import { AuthState } from "./types";
+import { IAuthState } from "./types";
 
 
 const namespaced: boolean = true;
 
-const state: AuthState = {
+const state: IAuthState = {
   user: {
     username: "ilovesshan",
     token: "",
@@ -20,10 +20,10 @@ const state: AuthState = {
 }
 
 
-const getters: GetterTree<AuthState, RootState> = {}
+const getters: GetterTree<IAuthState, RootState> = {}
 
-const mutations: MutationTree<AuthState> = {
-  saveUserInfo(state: AuthState, payload: any) {
+const mutations: MutationTree<IAuthState> = {
+  saveUserInfo(state: IAuthState, payload: any) {
     const {username, token } = payload;
     state.user.userDetail = payload;
     state.user.username = username;
@@ -31,7 +31,7 @@ const mutations: MutationTree<AuthState> = {
   }
 }
 
-const actions: ActionTree<AuthState, RootState> = {
+const actions: ActionTree<IAuthState, RootState> = {
   saveUserInfo({ commit }, payload: any) {
     commit("saveUserInfo", payload);
 
@@ -41,7 +41,7 @@ const actions: ActionTree<AuthState, RootState> = {
   }
 }
 
-const userModule: Module<AuthState, RootState> = {
+const userModule: Module<IAuthState, RootState> = {
   namespaced,
   state,
   mutations,

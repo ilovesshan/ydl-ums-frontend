@@ -1,10 +1,10 @@
 
-export interface User {
+export interface IUser {
   username:String,
   token:String,
   userDetail: any,
 }
 
-export interface AuthState{
-  user: User,
+export interface IAuthState{
+  user: IUser,
 }
