@@ -1,11 +1,11 @@
 import {createStore } from "vuex"
 import type {Store } from "vuex"
 
-import type { IRootState } from "./types"
+import type { RootState } from "./types"
 
 import authModule from "./modules/auth";
 
-const store:Store<IRootState> = createStore<IRootState>({
+const store:Store<RootState> = createStore<RootState>({
   state:{
     version:"0.0.1",
   },

@@ -5,9 +5,7 @@
         <IndexAside />
         <el-container direction="vertical">
           <IndexHeader />
-          <el-main>
-            Main
-          </el-main>
+          <el-main> </el-main>
           <IndexFooter />
         </el-container>
       </el-container>
@@ -27,6 +25,8 @@ export default defineComponent({
     IndexHeader, IndexAside, IndexFooter,
   },
   setup() {
+    return {
+    }
   }
 })
 </script>

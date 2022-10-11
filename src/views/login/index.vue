@@ -56,31 +56,12 @@ export default {
       if (!formEl) return
       formEl.validate((valid) => {
         if (valid) {
-
-          login(ruleForm as ILoginUserInfo).then(res =>{
-            const {code, message, data} = res;
-            if(code == 200){
-              // 登录成功
-              ElMessage({message, type: 'success'});
-
-              // 保存token
-              store.dispatch("auth/saveUserInfo",data);
-
-              // 跳转到首页
-              router.push("/index");
-            }else{
-              // 登录失败
-              ElMessage({message, type: 'error'});
-            }
-          }).catch(err =>{
-            ElMessage({message: err, type: 'error'});
-          })
+          store.dispatch("auth/loginHandler", ruleForm);   
         } else {
           return false;
         }
       });
     }
-
     return {
       Avatar, Lock,
       ruleForm, rules, loginHandler, ruleFormRef
