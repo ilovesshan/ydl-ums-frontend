@@ -13,7 +13,8 @@ export default {
   },
   
   getSessionObject(key: string): any {
-    return JSON.parse(window.sessionStorage.getItem(key) || "");
+    const data =  window.sessionStorage.getItem(key);
+    return data ? JSON.parse(data) :"";
   },
 
   remove(key: string): void {

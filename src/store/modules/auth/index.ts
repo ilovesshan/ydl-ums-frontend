@@ -9,7 +9,7 @@ import type { ILoginUserInfo } from "@/views/login/loginTypes"
 import type { RootState } from "../../types"
 import type { IAuthState } from "./types";
 
-import { login } from "@/service/auth.service";
+import { login, logout } from "@/service/auth.service";
 import router from "@/router/index"
 import { ElMessage } from "element-plus";
 import cache from "@/utils/cache";
@@ -24,8 +24,23 @@ const state: IAuthState = {
   }
 }
 
+const getters: GetterTree<IAuthState, RootState> = {
+  isLogin(state, getters) {
+    return state.user.token !== "" && state.user.username !== "";
+  },
 
-const getters: GetterTree<IAuthState, RootState> = {}
+  userInfo(state, getters) {
+    return getters.isLogin ? state.user.userDetail : "";
+  },
+
+  username(state, getters) {
+    return getters.isLogin ? state.user.username : "";
+  },
+
+  token(state, getters) {
+    return getters.isLogin ? state.user.token : "";
+  }
+}
 
 const mutations: MutationTree<IAuthState> = {
   saveUserInfo(state: IAuthState, payload: any) {
@@ -34,11 +49,13 @@ const mutations: MutationTree<IAuthState> = {
     state.user.username = username;
     state.user.token = token;
   },
+
   cleanUserInfo(state: IAuthState, payload: any) {
     state.user.userDetail = "";
     state.user.username = "";;
     state.user.token = "";;
   }
+
 }
 
 const actions: ActionTree<IAuthState, RootState> = {
@@ -80,8 +97,16 @@ const actions: ActionTree<IAuthState, RootState> = {
 
   // 退出登录
   logoutHandler({ commit, dispatch }, payload: ILoginUserInfo) {
-    dispatch("cleanUserInfo");
-    router.push("/login");
+    logout().then(res => {
+      const { code, message } = res;
+      if (code == 200) {
+        ElMessage({ message, type: 'success' });
+        dispatch("cleanUserInfo");
+        router.push("/login");
+      } else {
+        ElMessage({ message, type: 'error' });
+      }
+    })
   }
 }
 

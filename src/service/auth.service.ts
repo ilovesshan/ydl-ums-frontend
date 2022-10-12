@@ -11,3 +11,12 @@ export function login(data: ILoginUserInfo) {
     data,
   });
 }
+
+
+// 用户退出登录
+export function logout() {
+  return service({
+    method: "post",
+    url: "/logout",
+  });
+}

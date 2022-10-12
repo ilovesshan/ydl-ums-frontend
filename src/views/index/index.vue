@@ -5,7 +5,9 @@
         <IndexAside />
         <el-container direction="vertical">
           <IndexHeader />
-          <el-main> </el-main>
+          <el-main> 
+            <p>{{ username }}</p>
+          </el-main>
           <IndexFooter />
         </el-container>
       </el-container>
@@ -14,7 +16,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from "vuex"
 
 import IndexHeader from "@/components/layout/header.vue"
 import IndexAside from "@/components/layout/aside.vue"
@@ -25,7 +28,11 @@ export default defineComponent({
     IndexHeader, IndexAside, IndexFooter,
   },
   setup() {
+    const store = useStore();
+
+    const username = computed(() => store.getters["auth/username"]);
     return {
+      username,
     }
   }
 })

@@ -6,6 +6,7 @@ import ServiceConfig from "./serviceConfig"
 
 import router from "@/router"
 import cache from "@/utils/cache"
+import store from "@/store"
 
 const baseConfig: AxiosRequestConfig = {
   baseURL: ServiceConfig.devProxyBaseUrl,
@@ -26,9 +27,10 @@ let loadingInstance: any = null;
 instance.interceptors.request.use(config => {
   // 开启loading
   loadingInstance = ElLoading.service({ lock: true, text: '拼命加载中...', background: 'rgba(0, 0, 0, 0.7)', });
-
-  const token = cache.getSessionString("token");
+  const token = store.getters["auth/token"] || cache.getSessionString("token");
+  const username = store.getters["auth/username"];
   config.headers!["Authorization"] = token || "";
+  config.headers!["username"] = username || "";
   return config;
 },
   error => {

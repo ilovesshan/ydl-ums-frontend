@@ -9,6 +9,7 @@ import type {
 } from "vue-router"
 
 import cache from "@/utils/cache"
+import store from "@/store"
 
 const Index = () => import("@/views/index/index.vue")
 const Login = () => import("@/views/login/index.vue")
@@ -42,11 +43,19 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
     next();
   } else {
     // 判断有没有登录
-    const token = cache.getSessionString("token");
-    if (token) {
+    if(store.getters["auth/isLogin"]){
       next();
-    } else {
-      next("/login");
+    }else{
+      // 有可能是刷新操作 或者是真的没登录过
+      const token = cache.getSessionString("token");
+      const userInfo = cache.getSessionObject("userInfo");
+      if (token && userInfo) {
+        // 当前是刷新 将用户信息从新放在vuex
+        store.dispatch("auth/saveUserInfo", userInfo);
+        next();
+      } else {
+        next("/login");
+      }
     }
   }
 });
