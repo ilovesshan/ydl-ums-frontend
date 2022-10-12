@@ -6,7 +6,7 @@
         <el-container direction="vertical">
           <IndexHeader />
           <el-main> 
-            <p>{{ username }}</p>
+            <router-view></router-view>
           </el-main>
           <IndexFooter />
         </el-container>

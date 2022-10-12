@@ -2,22 +2,22 @@
 
 <template>
   <el-aside width="200px">
-    <el-menu unique-opened background-color="#304156" default-active="1" text-color="#bfcbd9" @open="handleOpen"
-      @close="handleClose">
-      <el-menu-item index="1">
+    <el-menu router unique-opened background-color="#304156" :default-active="currentPath" text-color="#bfcbd9"
+      @open="handleOpen" @close="handleClose">
+      <el-menu-item index="/index/home">
         <el-icon>
           <Orange />
         </el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="2">
+      <el-sub-menu index="/index/system-management">
         <template #title>
           <el-icon>
             <Setting />
           </el-icon>
           <span>系统管理</span>
         </template>
-        <el-menu-item index="2-1">
+        <el-menu-item index="/index/system-management/user-management">
           <template #title>
             <el-icon>
               <UserFilled />
@@ -25,7 +25,7 @@
             <span>用户管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="2-2">
+        <el-menu-item index="/index/system-management/role-management">
           <template #title>
             <el-icon>
               <TurnOff />
@@ -34,14 +34,14 @@
           </template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="3">
+      <el-sub-menu index="/index/system-monitoring">
         <template #title>
           <el-icon>
             <Monitor />
           </el-icon>
           <span>系统监控</span>
         </template>
-        <el-menu-item index="3-1">
+        <el-menu-item index="/index/system-monitoring/access-log">
           <template #title>
             <el-icon>
               <ChromeFilled />
@@ -49,7 +49,7 @@
             <span>访问日志</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="3-2">
+        <el-menu-item index="/index/system-monitoring/online-user">
           <template #title>
             <el-icon>
               <Connection />
@@ -63,11 +63,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 import {
   Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
 } from '@element-plus/icons-vue'
+
+import { useRoute } from "vue-router"
+
 
 export default defineComponent({
   name: "",
@@ -75,13 +78,22 @@ export default defineComponent({
     Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
   },
   setup() {
+    const route = useRoute()
+    const currentPath = ref("");
+    onMounted(() => {
+      currentPath.value = route.fullPath;
+    });
+
     const handleOpen = (key: string, keyPath: string[]) => {
       console.log(key, keyPath)
     }
+
     const handleClose = (key: string, keyPath: string[]) => {
       console.log(key, keyPath)
     }
+
     return {
+      currentPath,
       handleOpen, handleClose
     }
   }
