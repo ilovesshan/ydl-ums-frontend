@@ -85,7 +85,7 @@ const actions: ActionTree<IAuthState, RootState> = {
         dispatch("saveUserInfo", data);
 
         // 跳转到首页
-        router.push("/index");
+        router.push("/");
       } else {
         // 登录失败
         ElMessage({ message, type: 'error' });

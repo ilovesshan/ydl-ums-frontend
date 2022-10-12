@@ -4,20 +4,20 @@
   <el-aside width="200px">
     <el-menu router unique-opened background-color="#304156" :default-active="currentPath" text-color="#bfcbd9"
       @open="handleOpen" @close="handleClose">
-      <el-menu-item index="/index/home">
+      <el-menu-item index="/home">
         <el-icon>
           <Orange />
         </el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="/index/system-management">
+      <el-sub-menu index="/system-management">
         <template #title>
           <el-icon>
             <Setting />
           </el-icon>
           <span>系统管理</span>
         </template>
-        <el-menu-item index="/index/system-management/user-management">
+        <el-menu-item index="/system-management/user-management">
           <template #title>
             <el-icon>
               <UserFilled />
@@ -25,7 +25,7 @@
             <span>用户管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/index/system-management/role-management">
+        <el-menu-item index="/system-management/role-management">
           <template #title>
             <el-icon>
               <TurnOff />
@@ -34,14 +34,14 @@
           </template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="/index/system-monitoring">
+      <el-sub-menu index="/system-monitoring">
         <template #title>
           <el-icon>
             <Monitor />
           </el-icon>
           <span>系统监控</span>
         </template>
-        <el-menu-item index="/index/system-monitoring/access-log">
+        <el-menu-item index="/system-monitoring/access-log">
           <template #title>
             <el-icon>
               <ChromeFilled />
@@ -49,7 +49,7 @@
             <span>访问日志</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/index/system-monitoring/online-user">
+        <el-menu-item index="/system-monitoring/online-user">
           <template #title>
             <el-icon>
               <Connection />
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 
 import {
   Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
@@ -80,16 +80,15 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const currentPath = ref("");
-    onMounted(() => {
-      currentPath.value = route.fullPath;
-    });
+
+    watch(()=> route.fullPath,(newVal)=>{
+      currentPath.value = newVal;
+    },{ immediate: true})
 
     const handleOpen = (key: string, keyPath: string[]) => {
-      console.log(key, keyPath)
     }
 
     const handleClose = (key: string, keyPath: string[]) => {
-      console.log(key, keyPath)
     }
 
     return {

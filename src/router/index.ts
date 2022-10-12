@@ -27,45 +27,45 @@ const Login = () => import("@/views/login/index.vue")
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
-    redirect: "/index"
-  },
-  {
     path: "/login",
     name: "login",
     component: Login,
   },
   {
-    path: "/index",
+    path: "/",
     name: "index",
     component: Index,
-    children:[
+    meta: { title: "首页" },
+    children: [
       {
-        path:"/index",
-        redirect:"/index/home"
+        path: "/",
+        redirect: "/home"
       },
 
       // 首页
       {
-        path: "/index/home",
+        path: "/home",
         name: "home",
         component: Home,
       },
 
       // 系统管理
       {
-        path: "/index/system-management/",
+        path: "/system-management/",
         name: "role-management",
+        meta: { title: "系统管理" },
         component: SystemManagement,
-        children:[
+        children: [
           {
-            path: "/index/system-management/role-management",
+            path: "/system-management/role-management",
             name: "role-management",
+            meta: { title: "角色管理" },
             component: RoleManagement,
           },
           {
-            path: "/index/system-management/user-management",
+            path: "/system-management/user-management",
             name: "user-management",
+            meta: { title: "用户管理" },
             component: UserManagement,
           },
         ]
@@ -74,18 +74,21 @@ const routes: RouteRecordRaw[] = [
 
       // 系统监控
       {
-        path: "/index/system-monitoring/",
+        path: "/system-monitoring/",
         name: "system-monitoring",
+        meta: { title: "系统监控" },
         component: SystemMonitoring,
-        children:[
+        children: [
           {
-            path: "/index/system-monitoring/access-log/",
+            path: "/system-monitoring/access-log/",
             name: "access-log",
+            meta: { title: "访问日志" },
             component: AccessLog,
-          }, 
+          },
           {
-            path: "/index/system-monitoring/online-user",
+            path: "/system-monitoring/online-user",
             name: "online-user",
+            meta: { title: "在线用户" },
             component: OnlineUser,
           },
         ]
@@ -101,15 +104,14 @@ const router = createRouter({
 
 // 简单进行路由拦截
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  console.log(to);
   if (to.fullPath == "/login") {
     // 放过登录
     next();
   } else {
     // 判断有没有登录
-    if(store.getters["auth/isLogin"]){
+    if (store.getters["auth/isLogin"]) {
       next();
-    }else{
+    } else {
       // 有可能是刷新操作 或者是真的没登录过
       const token = cache.getSessionString("token");
       const userInfo = cache.getSessionObject("userInfo");

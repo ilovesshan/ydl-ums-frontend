@@ -1,16 +1,21 @@
 <template>
-  <div class="home">
+  <div>
+    <div class="home">
     <h2>首页</h2>
+  </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "home",
-});
+  setup () {
+    return {}
+  }
+})
 </script>
 
-<style lang="less">
+<style scoped lang="less">
+
 </style>
