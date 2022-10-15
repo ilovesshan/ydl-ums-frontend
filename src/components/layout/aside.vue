@@ -33,6 +33,14 @@
             <span>角色管理</span>
           </template>
         </el-menu-item>
+        <el-menu-item index="/system-management/menu-management">
+          <template #title>
+            <el-icon>
+              <Menu />
+            </el-icon>
+            <span>菜单管理</span>
+          </template>
+        </el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="/system-monitoring">
         <template #title>
@@ -63,10 +71,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { defineComponent,ref, watch } from 'vue';
 
 import {
-  Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
+  Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection, Menu
 } from '@element-plus/icons-vue'
 
 import { useRoute } from "vue-router"
@@ -75,7 +83,7 @@ import { useRoute } from "vue-router"
 export default defineComponent({
   name: "",
   components: {
-    Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection
+    Orange, Setting, UserFilled, TurnOff, Monitor, ChromeFilled, Connection, Menu
   },
   setup() {
     const route = useRoute()

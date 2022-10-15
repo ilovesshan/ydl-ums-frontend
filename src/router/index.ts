@@ -17,6 +17,7 @@ const Home = () => import("@/views/index/pages/home/index.vue");
 const SystemManagement = () => import("@/views/index/pages/system-management/index.vue");
 const RoleManagement = () => import("@/views/index/pages/system-management/role-management.vue");
 const UserManagement = () => import("@/views/index/pages/system-management/user-management.vue");
+const MenuManagement = () => import("@/views/index/pages/system-management/menu-management.vue");
 
 
 const SystemMonitoring = () => import("@/views/index/pages/system-monitoring/index.vue");
@@ -51,7 +52,7 @@ const routes: RouteRecordRaw[] = [
 
       // 系统管理
       {
-        path: "/system-management/",
+        path: "/system-management",
         name: "role-management",
         meta: { title: "系统管理" },
         component: SystemManagement,
@@ -68,19 +69,25 @@ const routes: RouteRecordRaw[] = [
             meta: { title: "用户管理" },
             component: UserManagement,
           },
+          {
+            path: "/system-management/menu-management",
+            name: "menu-management",
+            meta: { title: "菜单管理" },
+            component: MenuManagement,
+          },
         ]
       },
 
 
       // 系统监控
       {
-        path: "/system-monitoring/",
+        path: "/system-monitoring",
         name: "system-monitoring",
         meta: { title: "系统监控" },
         component: SystemMonitoring,
         children: [
           {
-            path: "/system-monitoring/access-log/",
+            path: "/system-monitoring/access-log",
             name: "access-log",
             meta: { title: "访问日志" },
             component: AccessLog,
