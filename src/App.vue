@@ -17,7 +17,7 @@ export default defineComponent({
         store.dispatch("auth/logoutHandler");
         setTimeout(() => { }, 1000);
       } else {
-        alert("你正在刷新页面");
+        // alert("你正在刷新页面");
       }
     }
     return {}
