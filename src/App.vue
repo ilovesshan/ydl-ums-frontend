@@ -3,12 +3,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+
+import { useStore } from "vuex";
+
+import { defineComponent, onMounted } from "vue";
 
 export default defineComponent({
-  name: "",
-});
+  setup() {
+    const store = useStore();
+
+    window.onbeforeunload = function (event: any) {
+      if (!(event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey)) {
+        store.dispatch("auth/logoutHandler");
+        setTimeout(() => { }, 1000);
+      } else {
+        alert("你正在刷新页面");
+      }
+    }
+    return {}
+  }
+})
 </script>
 
-<style lang="less">
+<style scoped>
+
 </style>
