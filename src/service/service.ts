@@ -29,8 +29,13 @@ instance.interceptors.request.use(config => {
   loadingInstance = ElLoading.service({ lock: true, text: '拼命加载中...', background: 'rgba(0, 0, 0, 0.7)', });
   const token = store.getters["auth/token"] || cache.getSessionString("token");
   const username = store.getters["auth/username"];
+  
+    // 添加token信息
   config.headers!["Authorization"] = token || "";
   config.headers!["username"] = username || "";
+  
+  // 添加时间戳
+  config.url += `?t=${new Date().getTime()}`
   return config;
 },
   error => {
@@ -53,7 +58,7 @@ instance.interceptors.response.use(response => {
     loadingInstance.close();
     if (error.response && error.response.status == 301) {
       router.push("/login");
-      ElMessage({ message: "暂无访问/操作权限,请登录", type: 'error' });
+      ElMessage({ message: error.response.data.message, type: 'error' });
     } else {
       ElMessage({ message: "请求失败,请联系网站管理员", type: 'error' });
     }
