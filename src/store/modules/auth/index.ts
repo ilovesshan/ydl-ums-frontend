@@ -9,7 +9,7 @@ import type { ILoginUserInfo } from "@/views/login/loginTypes"
 import type { RootState } from "../../types"
 import type { IAuthState } from "./types";
 
-import { login, logout } from "@/service/auth.service";
+import { login, logout, permission } from "@/service/auth.service";
 import router from "@/router/index"
 import { ElMessage } from "element-plus";
 import cache from "@/utils/cache";
@@ -83,6 +83,13 @@ const actions: ActionTree<IAuthState, RootState> = {
 
         // 保存token和用户信息
         dispatch("saveUserInfo", data);
+
+        // 获取当前用户的角色权限信息
+        permission(data.userId).then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        });
 
         // 跳转到首页
         router.push("/");
