@@ -29,11 +29,11 @@ instance.interceptors.request.use(config => {
   loadingInstance = ElLoading.service({ lock: true, text: '拼命加载中...', background: 'rgba(0, 0, 0, 0.7)', });
   const token = store.getters["auth/token"] || cache.getSessionString("token");
   const username = store.getters["auth/username"];
-  
-    // 添加token信息
+
+  // 添加token信息
   config.headers!["Authorization"] = token || "";
   config.headers!["username"] = username || "";
-  
+
   // 添加时间戳
   config.url += `?t=${new Date().getTime()}`
   return config;
@@ -51,6 +51,15 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(response => {
   // 关闭loading
   loadingInstance.close();
+
+  const { code, message } = response.data
+
+  if (code == 200) {
+    return response;
+  } else {
+    ElMessage({ message, type: 'error' });
+  }
+
   return response;
 },
   error => {
