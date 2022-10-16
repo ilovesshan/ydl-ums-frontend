@@ -4,20 +4,20 @@
   <el-aside width="200px">
     <el-menu router unique-opened background-color="#304156" :default-active="currentPath" text-color="#bfcbd9"
       @open="handleOpen" @close="handleClose">
-      <el-menu-item index="/home">
+      <el-menu-item v-permission=" '/home' " index="/home">
         <el-icon>
           <Orange />
         </el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="/system-management">
+      <el-sub-menu v-permission=" '/system-management' "  index="/system-management">
         <template #title>
           <el-icon>
             <Setting />
           </el-icon>
           <span>系统管理</span>
         </template>
-        <el-menu-item index="/system-management/user-management">
+        <el-menu-item  v-permission=" '/system-management/user-management' "  index="/system-management/user-management">
           <template #title>
             <el-icon>
               <UserFilled />
@@ -25,15 +25,15 @@
             <span>用户管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/system-management/role-management">
-          <template #title>
+        <el-menu-item  v-permission=" '/system-management/role-management' "  index="/system-management/role-management">
+          <template #title  v-permission=" '/system-management' " >
             <el-icon>
               <TurnOff />
             </el-icon>
             <span>角色管理</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/system-management/menu-management">
+        <el-menu-item v-permission=" '/system-management/menu-management' "  index="/system-management/menu-management">
           <template #title>
             <el-icon>
               <Menu />
@@ -42,14 +42,14 @@
           </template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="/system-monitoring">
+      <el-sub-menu v-permission=" '/system-monitoring' " index="/system-monitoring">
         <template #title>
           <el-icon>
             <Monitor />
           </el-icon>
           <span>系统监控</span>
         </template>
-        <el-menu-item index="/system-monitoring/access-log">
+        <el-menu-item  v-permission=" '/system-monitoring/access-log' "  index="/system-monitoring/access-log">
           <template #title>
             <el-icon>
               <ChromeFilled />
@@ -57,7 +57,7 @@
             <span>访问日志</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/system-monitoring/online-user">
+        <el-menu-item  v-permission=" '/system-monitoring/online-user' "  index="/system-monitoring/online-user">
           <template #title>
             <el-icon>
               <Connection />

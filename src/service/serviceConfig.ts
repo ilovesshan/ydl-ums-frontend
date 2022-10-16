@@ -10,7 +10,7 @@ interface IServiceConfig {
 const ServiceConfig : IServiceConfig = {
   devProxyBaseUrl:"/api/ums",
   devBaseUrl:"http://localhost/usm",
-  devTimeout: 8000,
+  devTimeout: 15000,
   
   prodProxyBaseUrl:"/api/ums",
   prodBaseUrl:"http://ilovesshan.com/ums",

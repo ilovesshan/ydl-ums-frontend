@@ -21,24 +21,41 @@ const state: IAuthState = {
     username: "ilovesshan",
     token: "",
     userDetail: "",
-  }
+  },
+  permission: {
+    permissions: [],
+    roles: [],
+    rolesAndPermissions: "",
+  },
 }
 
 const getters: GetterTree<IAuthState, RootState> = {
-  isLogin(state, getters) {
+  isLogin(state, getters): boolean {
     return state.user.token !== "" && state.user.username !== "";
   },
 
-  userInfo(state, getters) {
+  userInfo(state, getters): string {
     return getters.isLogin ? state.user.userDetail : "";
   },
 
-  username(state, getters) {
+  userId(state, getters): string {
+    return getters.isLogin ? state.user.userDetail.userId : "";
+  },
+
+  username(state, getters): String {
     return getters.isLogin ? state.user.username : "";
   },
 
-  token(state, getters) {
+  token(state, getters): String {
     return getters.isLogin ? state.user.token : "";
+  },
+
+  permissions(state, getters): string[] {
+    return getters.isLogin ? state.permission.permissions : [];
+  },
+
+  roles(state, getters): string[] {
+    return getters.isLogin ? state.permission.roles : [];
   }
 }
 
@@ -54,8 +71,14 @@ const mutations: MutationTree<IAuthState> = {
     state.user.userDetail = "";
     state.user.username = "";;
     state.user.token = "";;
-  }
+  },
 
+  saveUserPermissionInfo(state: IAuthState, payload: any) {
+    const { roles, permissions, rolesAndPermissions } = payload;
+    state.permission.roles = roles;
+    state.permission.permissions = permissions;
+    state.permission.rolesAndPermissions = rolesAndPermissions;
+  },
 }
 
 const actions: ActionTree<IAuthState, RootState> = {
@@ -67,14 +90,36 @@ const actions: ActionTree<IAuthState, RootState> = {
     cache.saveSessionObject("userInfo", payload);
   },
 
+  // 清除用户信息
   cleanUserInfo({ commit }, payload: any) {
     commit("cleanUserInfo", payload);
     cache.remove("token");
     cache.remove("userInfo");
   },
 
+
+  // 获取用户权限信息
+  saveUserPermissionInfo({ commit }, userId: number) {
+    return new Promise((resolve, reject) => {
+      // 获取当前用户的角色权限信息
+      permission(userId).then(res => {
+        const { code, message, data } = res;
+        if (code == 200) {
+          commit("saveUserPermissionInfo", data);
+          resolve(0);
+        } else {
+          ElMessage({ message, type: 'error' });
+          reject()
+        }
+      }).catch(err => {
+        console.log(err);
+        reject()
+      });
+    })
+  },
+
   // 用户登录
-  loginHandler({ commit, dispatch }, payload: ILoginUserInfo) {
+  loginHandler({ commit, dispatch, state }, payload: ILoginUserInfo) {
     login(payload).then(res => {
       const { code, message, data } = res;
       if (code == 200) {
@@ -84,15 +129,12 @@ const actions: ActionTree<IAuthState, RootState> = {
         // 保存token和用户信息
         dispatch("saveUserInfo", data);
 
-        // 获取当前用户的角色权限信息
-        permission(data.userId).then(res => {
-          console.log(res);
-        }).catch(err => {
-          console.log(err);
+        // 获取用户权限信息
+        dispatch("saveUserPermissionInfo", state.user.userDetail.userId).then(_ => {
+          // 跳转到首页
+          router.push("/");
         });
 
-        // 跳转到首页
-        router.push("/");
       } else {
         // 登录失败
         ElMessage({ message, type: 'error' });

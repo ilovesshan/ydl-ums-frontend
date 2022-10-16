@@ -125,6 +125,10 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
       if (token && userInfo) {
         // 当前是刷新 将用户信息从新放在vuex
         store.dispatch("auth/saveUserInfo", userInfo);
+
+        // 重新获取用户权限信息
+        store.dispatch("auth/saveUserPermissionInfo", store.getters["auth/userId"]);
+
         next();
       } else {
         next("/login");
