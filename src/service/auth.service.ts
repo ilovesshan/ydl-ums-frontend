@@ -28,3 +28,13 @@ export function logout() {
     url: "/logout",
   });
 }
+
+
+// 更新用户密码
+export function updatePassword(data: any) {
+  return service({
+    method: "put",
+    url: `/password`,
+    data,
+  });
+}

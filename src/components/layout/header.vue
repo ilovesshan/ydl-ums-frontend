@@ -56,52 +56,82 @@
 
     <!-- 用户信息对话框 -->
     <el-dialog v-model="dialogVisible" title="个人中心" width="40%" :before-close="handleClose">
-      <el-form ref="ruleFormRef" :model="ruleForm.submitData" status-icon :rules="rules" label-width="80px"
-        class="demo-ruleForm">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="ruleForm.submitData.username" type="text" autocomplete="off" />
-        </el-form-item>
+      <el-tabs v-model="tabActiveIndex" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="基本信息" name="baseUserInfo">
+          <!-- 基本信息 -->
+          <el-form ref="userDetailFormRef" :model="userDetailForm.submitData" status-icon :rules="userDetailRules"
+            label-width="80px" class="demo-ruleForm">
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="userDetailForm.submitData.username" type="text" autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="ruleForm.submitData.nickName" type="text" autocomplete="off" />
-        </el-form-item>
+            <el-form-item label="昵称" prop="nickName">
+              <el-input v-model="userDetailForm.submitData.nickName" type="text" autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item label="性别" prop="sex">
-          <el-select v-model="ruleForm.submitData.sex" placeholder="">
-            <el-option label="男" value="0" />
-            <el-option label="女" value="1" />
-          </el-select>
-        </el-form-item>
+            <el-form-item label="性别" prop="sex">
+              <el-select v-model="userDetailForm.submitData.sex" placeholder="">
+                <el-option label="男" value="0" />
+                <el-option label="女" value="1" />
+              </el-select>
+            </el-form-item>
 
-        <el-form-item label="手机号" prop="phonenumber">
-          <el-input v-model="ruleForm.submitData.phonenumber" type="text" autocomplete="off" />
-        </el-form-item>
+            <el-form-item label="手机号" prop="phonenumber">
+              <el-input v-model="userDetailForm.submitData.phonenumber" type="text" autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item label="电子邮箱" prop="email">
-          <el-input v-model="ruleForm.submitData.email" type="text" autocomplete="off" />
-        </el-form-item>
+            <el-form-item label="电子邮箱" prop="email">
+              <el-input v-model="userDetailForm.submitData.email" type="text" autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item label="账号状态" prop="delFlag">
-          <el-button :type="ruleForm.submitData.delFlag == '0' ? 'success' : 'danger' " size="small" disabled>
-            {{ ruleForm.submitData.delFlag == '0' ? '存在' : '删除' }}
-          </el-button>
-        </el-form-item>
+            <el-form-item label="账号状态" prop="delFlag">
+              <el-button :type="userDetailForm.submitData.delFlag == '0' ? 'success' : 'danger' " size="small" disabled>
+                {{ userDetailForm.submitData.delFlag == '0' ? '存在' : '删除' }}
+              </el-button>
+            </el-form-item>
 
-        <el-form-item label="创建者" prop="createBy">
-          <el-input :value="ruleForm.submitData.createBy ? ruleForm.submitData.createBy :'系统生成'" disabled type="text"
-            autocomplete="off" />
-        </el-form-item>
+            <el-form-item label="创建者" prop="createBy">
+              <el-input :value="userDetailForm.submitData.createBy ? userDetailForm.submitData.createBy :'系统生成'"
+                disabled type="text" autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item label="更新时间" prop="updateTime">
-          <el-input v-model="ruleForm.submitData.updateTime" type="text" disabled autocomplete="off" />
-        </el-form-item>
+            <el-form-item label="更新时间" prop="updateTime">
+              <el-input v-model="userDetailForm.submitData.updateTime" type="text" disabled autocomplete="off" />
+            </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)">更新</el-button>
-          <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-        </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitUserDetailForm(userDetailFormRef)">更新</el-button>
+              <el-button @click="resetUserDetailForm(userDetailFormRef)">重置</el-button>
+            </el-form-item>
 
-      </el-form>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="修改密码" name="second">
+          <!-- 修改密码 -->
+          <el-form ref="resetPasswordFormRef" :model="resetPasswordForm.submitData" status-icon
+            :rules="resetPasswordRules" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="旧密码" prop="oldPassword">
+              <el-input v-model="resetPasswordForm.submitData.oldPassword" show-password type="password"
+                autocomplete="off" />
+            </el-form-item>
+
+            <el-form-item label="新密码" prop="newPassword">
+              <el-input v-model="resetPasswordForm.submitData.newPassword" show-password type="password"
+                autocomplete="off" />
+            </el-form-item>
+
+            <el-form-item label="确认新密码" prop="sureNewPassword">
+              <el-input v-model="resetPasswordForm.submitData.sureNewPassword" show-password type="password"
+                autocomplete="off" />
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="submitResetPasswordForm(resetPasswordFormRef)">更新</el-button>
+              <el-button @click="resetResetPasswordForm(resetPasswordFormRef)">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">关闭</el-button>
@@ -113,8 +143,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, watch, reactive, ref } from 'vue';
-import { ElMessage } from 'element-plus'
-import type { FormInstance } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { FormInstance, TabsPaneContext } from 'element-plus'
 
 import { useRoute } from "vue-router"
 import { useStore } from "vuex"
@@ -122,6 +152,7 @@ import { useStore } from "vuex"
 import { Operation } from "@element-plus/icons-vue"
 
 import { update } from "@/service/user.service";
+import { updatePassword } from "@/service/auth.service";
 
 
 export default defineComponent({
@@ -130,12 +161,14 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const store = useStore();
-    const dialogVisible = ref(true);
-    const ruleFormRef = ref<FormInstance>();
+    const dialogVisible = ref(false);
+    const userDetailFormRef = ref<FormInstance>();
+    const resetPasswordFormRef = ref<FormInstance>();
 
+    const tabActiveIndex = ref('baseUserInfo');
     let breadCrumbList = ref<any[]>([]);
 
-    let ruleForm = reactive<any>({
+    let userDetailForm = reactive<any>({
       submitData: {
         username: "",
         nickName: "",
@@ -148,7 +181,7 @@ export default defineComponent({
       }
     });
 
-    let rules = reactive<any>({
+    let userDetailRules = reactive<any>({
       username: [{ required: true, trigger: 'blur' }],
       nickName: [{ required: true, trigger: 'blur' }],
       email: [{ required: true, trigger: 'blur' }],
@@ -159,28 +192,58 @@ export default defineComponent({
       updateTime: [{ required: false, trigger: 'blur' }],
     })
 
+    let resetPasswordForm = reactive<any>({
+      submitData: {
+        oldPassword: "",
+        newPassword: "",
+        sureNewPassword: "",
+      }
+    });
+
+    // 校验两次输入的新密码是否一样
+    const validateSureNewPassword = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('Please input the password again'))
+      } else if (value !== resetPasswordForm.submitData.newPassword) {
+        callback(new Error("Two inputs don't match!"))
+      } else {
+        callback()
+      }
+    }
+
+    let resetPasswordRules = reactive<any>({
+      oldPassword: [{ required: true, min: 6, max: 18, trigger: 'blur' }],
+      newPassword: [{ required: true, min: 6, max: 18, trigger: 'blur' }],
+      sureNewPassword: [{ validator: validateSureNewPassword, required: true, min: 6, max: 18, trigger: 'blur' }],
+    })
+
+
     watch(() => route.matched, (newVal) => {
       breadCrumbList.value = newVal.filter(r => r.meta && r.meta.title);
     }, { immediate: true })
 
-    onMounted(() => ruleForm.submitData = store.getters["auth/userDetail"]);
+    onMounted(() => userDetailForm.submitData = store.getters["auth/userDetail"]);
 
-    const logoutHandler = () => store.dispatch("auth/logoutHandler");
+    const logoutHandler = () => {
+      ElMessageBox.confirm('确定要退出吗？', { confirmButtonText: '确定', cancelButtonText: '再看看', type: 'warning' })
+        .then(() => store.dispatch("auth/logoutHandler"))
+        .catch(() => { })
+    }
 
     const handleClose = (done: () => void) => dialogVisible.value = false;
 
-    const submitForm = (formEl: FormInstance | undefined) => {
+    const submitUserDetailForm = (formEl: FormInstance | undefined) => {
       if (!formEl) return
       formEl.validate((valid) => {
         if (!valid) {
           return false
         } else {
           // 更新用户信息
-          update(ruleForm.submitData).then(res => {
+          update(userDetailForm.submitData).then(res => {
             const { code, message, data } = res;
             if (code == 200) {
               // 修改成功
-              ruleForm.submitData = data;
+              userDetailForm.submitData = data;
               store.dispatch("auth/saveUserInfo", { userInfo: data, token: store.getters["auth/token"] });
               ElMessage({ message, type: 'success' });
               dialogVisible.value = false;
@@ -195,21 +258,47 @@ export default defineComponent({
       })
     }
 
-    const resetForm = (formEl: FormInstance | undefined) => {
+    const resetUserDetailForm = (formEl: FormInstance | undefined) => {
       if (!formEl) return
       formEl.resetFields()
     }
 
+    const submitResetPasswordForm = (formEl: FormInstance | undefined) => {
+      if (!formEl) return
+      formEl.validate((valid) => {
+        if (!valid) {
+          return false
+        } else {
+          // 更新密码
+          resetPasswordForm.submitData["userId"] = store.getters["auth/userId"]
+          updatePassword(resetPasswordForm.submitData).then(res => {
+            const { code, message, data } = res;
+            if (code == 200) {
+              // 修改成功
+              ElMessage({ message, type: 'success' });
+              dialogVisible.value = false;
+              store.dispatch("auth/logoutHandler");
+            } else {
+              // 修改失败
+              ElMessage({ message, type: 'error' });
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        }
+      })
+    }
+
+    const resetResetPasswordForm = (formEl: FormInstance | undefined) => {
+      if (!formEl) return
+      formEl.resetFields()
+    }
+
+    const handleClick = (tab: TabsPaneContext, event: Event) => { }
+
     return {
-      resetForm,
-      submitForm,
-      ruleFormRef,
-      ruleForm,
-      rules,
-      dialogVisible,
-      handleClose,
-      breadCrumbList,
-      logoutHandler
+      tabActiveIndex, userDetailFormRef, userDetailForm, userDetailRules, dialogVisible, resetPasswordFormRef, breadCrumbList, resetPasswordRules, resetPasswordForm,
+      handleClose, handleClick, resetUserDetailForm, submitUserDetailForm, logoutHandler, submitResetPasswordForm, resetResetPasswordForm
     }
   }
 });
@@ -234,6 +323,20 @@ export default defineComponent({
       display: flex;
       margin: 0 8px;
     }
+  }
+
+  ::v-deep .el-dialog__header {
+    padding-bottom: 0;
+  }
+
+  ::v-deep .el-dialog__body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  ::v-deep .el-dialog__footer {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 </style>

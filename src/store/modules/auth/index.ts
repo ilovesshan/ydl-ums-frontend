@@ -148,7 +148,7 @@ const actions: ActionTree<IAuthState, RootState> = {
     logout().then(res => {
       const { code, message } = res;
       if (code == 200) {
-        ElMessage({ message, type: 'success' });
+        // ElMessage({ message, type: 'success' });
         dispatch("cleanUserInfo");
         router.push("/login");
       } else {

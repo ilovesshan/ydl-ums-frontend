@@ -57,7 +57,7 @@ instance.interceptors.response.use(response => {
   if (code == 200) {
     return response;
   } else {
-    ElMessage({ message, type: 'error' });
+    // ElMessage({ message, type: 'error' });
   }
 
   return response;
