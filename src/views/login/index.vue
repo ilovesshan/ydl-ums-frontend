@@ -14,8 +14,7 @@
         </el-form-item>
       </el-form>
       <div class="form-bottom">
-        <el-button class="find-password-btn" link>找回密码</el-button>
-        <el-button class="register-btn"  link  type="primary">新用户注册</el-button>
+        <el-button class="register-btn"  link  type="primary">找回密码</el-button>
       </div>
     </div>
   </div>

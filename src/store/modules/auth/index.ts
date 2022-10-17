@@ -34,7 +34,7 @@ const getters: GetterTree<IAuthState, RootState> = {
     return state.user.token !== "" && state.user.username !== "";
   },
 
-  userInfo(state, getters): string {
+  userDetail(state, getters): string {
     return getters.isLogin ? state.user.userDetail : "";
   },
 
@@ -61,9 +61,9 @@ const getters: GetterTree<IAuthState, RootState> = {
 
 const mutations: MutationTree<IAuthState> = {
   saveUserInfo(state: IAuthState, payload: any) {
-    const { username, token } = payload;
-    state.user.userDetail = payload;
-    state.user.username = username;
+    const { userInfo, token } = payload;
+    state.user.userDetail = userInfo;
+    state.user.username = userInfo.username;
     state.user.token = token;
   },
 
@@ -87,7 +87,7 @@ const actions: ActionTree<IAuthState, RootState> = {
     commit("saveUserInfo", payload);
     // 将用户信息保存在sessionStorage中
     cache.saveSessionString("token", payload.token);
-    cache.saveSessionObject("userInfo", payload);
+    cache.saveSessionObject("userInfo", payload.userInfo);
   },
 
   // 清除用户信息
@@ -96,7 +96,6 @@ const actions: ActionTree<IAuthState, RootState> = {
     cache.remove("token");
     cache.remove("userInfo");
   },
-
 
   // 获取用户权限信息
   saveUserPermissionInfo({ commit }, userId: number) {
@@ -127,7 +126,7 @@ const actions: ActionTree<IAuthState, RootState> = {
         ElMessage({ message, type: 'success' });
 
         // 保存token和用户信息
-        dispatch("saveUserInfo", data);
+        dispatch("saveUserInfo", { token: data.token, userInfo: data.ydlUser });
 
         // 获取用户权限信息
         dispatch("saveUserPermissionInfo", state.user.userDetail.userId).then(_ => {
