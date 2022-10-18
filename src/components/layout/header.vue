@@ -42,7 +42,7 @@
 
       <el-dropdown>
         <span class="el-dropdown-link">
-          <el-avatar shape="square" :size="35" src="https://avatars.githubusercontent.com/u/63763453?v=4" />
+          <el-avatar shape="square" :size="35" :src="avatar" />
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -53,7 +53,6 @@
       </el-dropdown>
     </div>
 
-
     <!-- 用户信息对话框 -->
     <el-dialog v-model="dialogVisible" title="个人中心" width="40%" :before-close="handleClose">
       <el-tabs v-model="tabActiveIndex" class="demo-tabs" @tab-click="handleClick">
@@ -61,6 +60,17 @@
           <!-- 基本信息 -->
           <el-form ref="userDetailFormRef" :model="userDetailForm.submitData" status-icon :rules="userDetailRules"
             label-width="80px" class="demo-ruleForm">
+
+            <el-form-item label="头像" prop="">
+              <el-upload :headers="uploadAvatarHeaders" class="avatar-uploader" action="/api/ums/attachment/upload"
+                :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                <img v-if="avatar" :src="avatar" class="avatar" />
+                <el-icon :size="24" v-else class="avatar-uploader-icon">
+                  <Plus />
+                </el-icon>
+              </el-upload>
+            </el-form-item>
+
             <el-form-item label="用户名" prop="username">
               <el-input v-model="userDetailForm.submitData.username" type="text" autocomplete="off" />
             </el-form-item>
@@ -90,7 +100,7 @@
               </el-button>
             </el-form-item>
 
-            <el-form-item label="创建者" prop="createBy">
+            <el-form-item label="授权人" prop="createBy">
               <el-input :value="userDetailForm.submitData.createBy ? userDetailForm.submitData.createBy :'系统生成'"
                 disabled type="text" autocomplete="off" />
             </el-form-item>
@@ -142,36 +152,46 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch, reactive, ref } from 'vue';
+import { defineComponent, onMounted, watch, reactive, ref} from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, TabsPaneContext } from 'element-plus'
 
 import { useRoute } from "vue-router"
 import { useStore } from "vuex"
 
-import { Operation } from "@element-plus/icons-vue"
+import { Operation, Plus } from "@element-plus/icons-vue"
+import type { UploadProps } from 'element-plus'
 
 import { update } from "@/service/user.service";
 import { updatePassword } from "@/service/auth.service";
 
-
 export default defineComponent({
   name: "",
-  components: { Operation, },
+  components: { Operation, Plus },
   setup() {
     const route = useRoute();
     const store = useStore();
-    const dialogVisible = ref(false);
+
     const userDetailFormRef = ref<FormInstance>();
     const resetPasswordFormRef = ref<FormInstance>();
 
+    const dialogVisible = ref(false);
     const tabActiveIndex = ref('baseUserInfo');
-    let breadCrumbList = ref<any[]>([]);
+    const breadCrumbList = ref<any[]>([]);
+
+    const avatar = ref(store.getters["auth/userDetail"].avatar);
+
+    const uploadAvatarHeaders = reactive<any>({
+      username: store.getters["auth/username"],
+      userId: store.getters["auth/userId"],
+      Authorization: store.getters["auth/token"],
+    })
 
     let userDetailForm = reactive<any>({
       submitData: {
         username: "",
         nickName: "",
+        avatar: "",
         email: "",
         phonenumber: "",
         sex: '0',
@@ -216,6 +236,30 @@ export default defineComponent({
       newPassword: [{ required: true, min: 6, max: 18, trigger: 'blur' }],
       sureNewPassword: [{ validator: validateSureNewPassword, required: true, min: 6, max: 18, trigger: 'blur' }],
     })
+
+
+    // 头像上传成功的回调
+    const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+      avatar.value = URL.createObjectURL(uploadFile.raw!)
+      const { code, message, data } = response;
+      if (code == 200) {
+        userDetailForm.submitData.avatar = data.id;
+      } else {
+        ElMessage({ message, type: 'error' });
+      }
+    }
+
+    // 头像上传之前的回调(做一些图片限制)
+    const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+      if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+        ElMessage.error('头像后缀名必须是JPG或者PNG')
+        return false
+      } else if (rawFile.size / 1024 / 1024 > 2) {
+        ElMessage.error('头像大小不能超过2MB!')
+        return false
+      }
+      return true
+    }
 
 
     watch(() => route.matched, (newVal) => {
@@ -297,8 +341,8 @@ export default defineComponent({
     const handleClick = (tab: TabsPaneContext, event: Event) => { }
 
     return {
-      tabActiveIndex, userDetailFormRef, userDetailForm, userDetailRules, dialogVisible, resetPasswordFormRef, breadCrumbList, resetPasswordRules, resetPasswordForm,
-      handleClose, handleClick, resetUserDetailForm, submitUserDetailForm, logoutHandler, submitResetPasswordForm, resetResetPasswordForm
+      tabActiveIndex, userDetailFormRef, userDetailForm, userDetailRules, dialogVisible, resetPasswordFormRef, breadCrumbList, resetPasswordRules, resetPasswordForm, uploadAvatarHeaders, avatar,
+      handleClose, handleClick, resetUserDetailForm, submitUserDetailForm, logoutHandler, submitResetPasswordForm, resetResetPasswordForm, handleAvatarSuccess, beforeAvatarUpload
     }
   }
 });
@@ -324,6 +368,19 @@ export default defineComponent({
       margin: 0 8px;
     }
   }
+
+  ::v-deep .avatar-uploader {
+    height: 70px;
+    line-height: 44px;
+  }
+
+  ::v-deep .avatar-uploader .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+  }
+
 
   ::v-deep .el-dialog__header {
     padding-bottom: 0;
