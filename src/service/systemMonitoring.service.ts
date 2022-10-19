@@ -25,3 +25,12 @@ export function deleteAccessByIds(data: string) {
     },
   });
 }
+
+// 导出访问列表
+export function exportAccessByIds(data: any[]) {
+  return service({
+    method: "post",
+    url: `/attachment/excel`,
+    data,
+  });
+}

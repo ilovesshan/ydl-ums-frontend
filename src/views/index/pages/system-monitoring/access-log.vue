@@ -81,7 +81,8 @@ import { ISelectConditions } from './types';
 
 import ConstantsConfig from "@/config/constants"
 
-// import { formatDate } from "@/utils/time"
+import { exportAccessByIds } from "@/service/systemMonitoring.service"
+import { JSONToExcelConvertor } from '@/utils/json2excel';
 
 
 export default defineComponent({
@@ -164,7 +165,14 @@ export default defineComponent({
     }
 
     // 导出访问日志
-    const exportAccessList = () => { }
+    const exportAccessList = () => {
+      //自定义标题栏
+      var title = ['主键', '用户ID', '用户账号', '登录IP', '用户登录地址', '浏览器类型', '操作系统',"登录时间"]
+      //自定义过滤栏（不需要导出的行）
+      var filter = []
+      //原始导出
+      JSONToExcelConvertor(selectRows.value, "report", title, filter);
+    }
 
     return {
       accessList, accessTotal, selectConditions, accessTime, selectRows, ConstantsConfig,
