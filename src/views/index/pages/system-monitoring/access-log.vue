@@ -167,11 +167,11 @@ export default defineComponent({
     // 导出访问日志
     const exportAccessList = () => {
       //自定义标题栏
-      var title = ['主键', '用户ID', '用户账号', '登录IP', '用户登录地址', '浏览器类型', '操作系统',"登录时间"]
+      var title: string[] = ['主键', '用户ID', '登录凭证', '用户账号', '登录IP', '用户登录地址', '浏览器类型', '操作系统', "登录时间"]
       //自定义过滤栏（不需要导出的行）
-      var filter = []
+      var filter: string[] = []
       //原始导出
-      JSONToExcelConvertor(selectRows.value, "report", title, filter);
+      JSONToExcelConvertor(selectRows.value, "用户登录日志表", title, filter);
     }
 
     return {
