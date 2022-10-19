@@ -1,10 +1,12 @@
 
 interface IAccessLog {
-  list: any[]
+  list: any[],
+  total: number,
 }
 
 interface IOnlineUser {
   list: any[]
+  total: number,
 }
 
 
@@ -15,4 +17,4 @@ interface ISystemMonitoring {
   onlineUser: IAccessLog,
 }
 
-export {  ISystemMonitoring }
+export { ISystemMonitoring }

@@ -1,6 +1,8 @@
 import { createApp } from "vue"
 
 import ElementPlus from "element-plus"
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+
 import "element-plus/dist/index.css"
 import "normalize.css/normalize.css"
 import "@/assets/css/common.css"
@@ -20,4 +22,5 @@ Object.keys(directives).forEach(key => {
   app.directive(key, directives[key])
 });
 
-app.use(router).use(store).use(ElementPlus).mount("#app")
+app.use(ElementPlus, { locale: zhCn })
+app.use(router).use(store).mount("#app")

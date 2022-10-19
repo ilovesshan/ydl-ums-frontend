@@ -19,17 +19,23 @@ const namespaced: boolean = true;
 const state: ISystemMonitoring = {
   accessLog: {
     list: [],
+    total: 0,
   },
   onlineUser: {
     list: [],
+    total: 0,
   }
-
 }
 
 const getters: GetterTree<ISystemMonitoring, RootState> = {
   //返回访问日志列表
-  AccessList(state, getters): any[] {
+  accessList(state, getters): any[] {
     return state.accessLog.list;
+  },
+
+  //返回访问日志列表总条数
+  accessTotal(state, getters): number {
+    return state.accessLog.total;
   }
 }
 
@@ -38,6 +44,11 @@ const mutations: MutationTree<ISystemMonitoring> = {
   //保存访问日志列表
   saveAccessList(state: ISystemMonitoring, payload: any[]) {
     state.accessLog.list = payload;
+  },
+
+  // 保存访问日志列表总条数
+  saveAccessTotal(state: ISystemMonitoring, payload: number) {
+    state.accessLog.total = payload;
   },
 }
 
@@ -48,12 +59,13 @@ const actions: ActionTree<ISystemMonitoring, RootState> = {
     selectAccessList(payload).then(res => {
       const { code, message, data } = res;
       if (code == 200) {
-        console.log(data);
+        const { content, totalElements } = data;
+        commit("saveAccessList", content);
+        commit("saveAccessTotal", totalElements);
       } else {
         ElMessage({ message, type: 'error' });
       }
     });
-    commit("saveAccessList", payload);
   },
 }
 
