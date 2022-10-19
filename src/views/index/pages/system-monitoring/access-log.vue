@@ -22,7 +22,7 @@
         <el-col :span="6">
           <el-form-item label="登录时间">
             <el-date-picker format="YYYY-MM-DD" v-model="accessTime" type="daterange" range-separator="到"
-              value-format="YYYY-MM-DD hh:mm:ss" @change="datePickerChange" start-placeholder="开始日期"
+              value-format="YYYY-MM-DD HH:mm:ss" @change="datePickerChange" start-placeholder="开始日期"
               end-placeholder="结束日期" />
           </el-form-item>
         </el-col>
@@ -64,7 +64,7 @@
     <!-- 分页对象 -->
     <div class="pagination-container">
       <el-pagination v-model:currentPage="selectConditions.pageNum" v-model:page-size="selectConditions.pageSize"
-        :page-sizes="[10, 30, 50, 100]" :background="true" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="ConstantsConfig.page_SIZE_LIST" :background="true" :layout="ConstantsConfig.LAYOUT"
         :total="accessTotal" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
@@ -74,9 +74,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, computed, ref } from 'vue';
 import { Delete, Download, Search, RefreshRight } from '@element-plus/icons-vue'
+import { ElMessageBox } from "element-plus";
 
 import { useStore } from "vuex"
 import { ISelectConditions } from './types';
+
+import ConstantsConfig from "@/config/constants"
 
 // import { formatDate } from "@/utils/time"
 
@@ -94,8 +97,8 @@ export default defineComponent({
     const accessTime = ref("");
     let selectRows = ref<any[]>([]);
     const selectConditions = reactive<ISelectConditions>({
-      pageSize: 10,
-      pageNum: 1,
+      pageSize: ConstantsConfig.PAGE_SIZE,
+      pageNum: ConstantsConfig.PAGE_NUM,
       condition: {
         username: "",
         systemOs: "",
@@ -120,6 +123,9 @@ export default defineComponent({
 
     // 处理开始时间和结束时间
     const datePickerChange = (value: any) => {
+      if (value[0] === value[1]) {
+        value[1] = value[1].replace("00:00:00", "23:59:59");
+      }
       selectConditions.condition.startTime = value[0];
       selectConditions.condition.endTime = value[1];
     }
@@ -140,16 +146,28 @@ export default defineComponent({
 
     // 删除访问日志
     const deleteAccessList = () => {
-      const ids = selectRows.value.map(row => row.loginId).join(",");
-      store.dispatch("systemMonitoring/deleteAccessByIds", ids);
+      ElMessageBox.confirm(
+        '此操作不可逆，确定要删除吗?',
+        '删除',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error',
+        }
+      ).then(() => {
+        const ids = selectRows.value.map(row => row.loginId).join(",");
+        store.dispatch("systemMonitoring/deleteAccessByIds", ids).then(res => {
+          // 删除成功之后 刷新列表
+          store.dispatch("systemMonitoring/selectAccessList", selectConditions);
+        });
+      }).catch(() => { })
     }
 
     // 导出访问日志
     const exportAccessList = () => { }
 
-
     return {
-      accessList, accessTotal, selectConditions, accessTime, selectRows,
+      accessList, accessTotal, selectConditions, accessTime, selectRows, ConstantsConfig,
       handleSizeChange, handleCurrentChange, selectAccessList, resetConditions, datePickerChange, handleSelectionChange, deleteAccessList, exportAccessList
     }
   }

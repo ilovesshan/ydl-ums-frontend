@@ -10,8 +10,9 @@ import { ElMessage } from "element-plus";
 
 import { ISystemMonitoring } from "./types";
 
-import { selectAccessList } from "@/service/systemMonitoring.service"
+import { selectAccessList, deleteAccessByIds } from "@/service/systemMonitoring.service"
 import { ISelectConditions } from "@/views/index/pages/system-monitoring/types";
+import ConstantsConfig from "@/config/constants";
 
 
 const namespaced: boolean = true;
@@ -67,21 +68,21 @@ const actions: ActionTree<ISystemMonitoring, RootState> = {
         ElMessage({ message, type: 'error' });
       }
     });
-  }, 
-  
+  },
+
   // 删除访问日志列表
   deleteAccessByIds({ commit }, payload: string) {
-    payload.condition["loginLocaltion"] = "";
-    selectAccessList(payload).then(res => {
-      const { code, message, data } = res;
-      if (code == 200) {
-        const { content, totalElements } = data;
-        commit("saveAccessList", content);
-        commit("saveAccessTotal", totalElements);
-      } else {
-        ElMessage({ message, type: 'error' });
-      }
-    });
+    return new Promise((resolve) => {
+      deleteAccessByIds(payload).then(res => {
+        const { code, message, data } = res;
+        if (code == 200) {
+          resolve(0);
+          ElMessage({ message, type: 'success' });
+        } else {
+          ElMessage({ message, type: 'error' });
+        }
+      });
+    })
   },
 }
 

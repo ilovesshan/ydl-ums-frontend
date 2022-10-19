@@ -14,3 +14,14 @@ export function selectAccessList(data: ISelectConditions) {
     },
   });
 }
+
+// 删除访问列表
+export function deleteAccessByIds(data: string) {
+  return service({
+    method: "delete",
+    url: `/loginLog`,
+    params: {
+      ids: data,
+    },
+  });
+}
