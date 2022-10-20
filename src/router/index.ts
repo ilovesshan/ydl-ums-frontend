@@ -127,9 +127,11 @@ router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, n
         store.dispatch("auth/saveUserInfo", { userInfo, token });
 
         // 重新获取用户权限信息
-        store.dispatch("auth/saveUserPermissionInfo", store.getters["auth/userId"]);
-
-        next();
+        store.dispatch("auth/saveUserPermissionInfo", store.getters["auth/userId"]).then(res => {
+          next();
+        }).catch(err => {
+          next("/login");
+        });
       } else {
         next("/login");
       }
