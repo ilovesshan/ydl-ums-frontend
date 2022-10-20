@@ -13,7 +13,7 @@ const permission: Directive = {
   mounted(el: ElType, binding: DirectiveBinding) {
     const needPermission: string = binding.value
     const permissions: string[] = store.getters["auth/permissions"]
-    if(!permissions.includes(needPermission)){
+    if(permissions && !permissions.includes(needPermission)){
       el.parentNode?.removeChild(el);
     }
   },
