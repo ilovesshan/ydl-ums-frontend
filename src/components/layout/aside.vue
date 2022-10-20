@@ -4,7 +4,7 @@
   <el-aside width="200px">
     <el-menu router unique-opened background-color="#304156" :default-active="currentPath" text-color="#bfcbd9"
       @open="handleOpen" @close="handleClose">
-      <el-menu-item v-permission=" '/home' " index="/home">
+      <el-menu-item index="/home">
         <el-icon>
           <Orange />
         </el-icon>
